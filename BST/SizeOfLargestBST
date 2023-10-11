@@ -1,0 +1,49 @@
+/*
+    Following is Binary Tree Node structure:
+    class TreeNode
+    {
+    public:
+        int data;
+        TreeNode *left, *right;
+        TreeNode() : data(0), left(NULL), right(NULL) {}
+        TreeNode(int x) : data(x), left(NULL), right(NULL) {}
+        TreeNode(int x, TreeNode *left, TreeNode *right) : data(x), left(left), right(right) {}
+    };
+*/
+class info
+{
+    public:
+    int maxx;
+    int minn;
+    int sz;
+    bool isBst;
+};
+
+info solve(TreeNode* root,int &maxsize)
+{
+ if(root==NULL)
+   return {INT_MIN, INT_MAX, 0, true};
+ info lt = solve(root->left, maxsize);
+ info rt = solve(root->right, maxsize);
+ info curr;
+ curr.maxx = max(root->data, rt.maxx);
+ curr.minn = min(root->data, lt.minn);
+ curr.sz = lt.sz + rt.sz + 1;
+ if (lt.isBst && rt.isBst && lt.maxx < root->data && rt.minn >root->data)
+   {
+       curr.isBst = true;
+}
+ else
+ {
+     curr.isBst=false;
+ }
+ 
+ if(curr.isBst)
+ maxsize=max(maxsize,curr.sz);
+ return curr;
+}
+int largestBST(TreeNode * root){
+    int maxsize=0;
+    info temp=solve(root,maxsize);
+    return maxsize;    
+}
